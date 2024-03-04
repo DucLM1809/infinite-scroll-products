@@ -1,10 +1,11 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { endpoints } from "@/constants";
+import { common, endpoints } from "@/constants";
 import { ApiResponse } from "@/types/response";
 import { Product } from "@/types/products";
 import qs from "query-string";
-import { Dispatch, SetStateAction } from "react";
+
+const { DEFAULT_PAGING } = common;
 
 interface Props {
   q: string;
@@ -33,8 +34,8 @@ const useInfiniteProducts = ({ q }: Props) => {
       }
     },
     initialPageParam: {
-      skip: 0,
-      limit: 20,
+      skip: DEFAULT_PAGING.SKIP,
+      limit: DEFAULT_PAGING.LIMIT,
     },
     getNextPageParam: (lastPage) => {
       if (lastPage.skip + lastPage.limit >= lastPage.total) {
