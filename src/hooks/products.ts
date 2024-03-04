@@ -1,11 +1,9 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { common, endpoints } from "@/constants";
-import { ApiResponse } from "@/types/response";
-import { Product } from "@/types/products";
-import qs from "query-string";
+import { common } from "@/constants";
+import { productsService } from "@/services";
 
 const { DEFAULT_PAGING } = common;
+const { getInfiniteProducts } = productsService;
 
 interface Props {
   q: string;
@@ -14,25 +12,7 @@ interface Props {
 const useInfiniteProducts = ({ q }: Props) => {
   return useInfiniteQuery({
     queryKey: ["products", q],
-    queryFn: async ({
-      pageParam,
-      queryKey,
-    }: {
-      pageParam: { skip: number; limit: number };
-      queryKey: string[];
-    }) => {
-      const url = qs.stringifyUrl({
-        url: endpoints.productEndpoints.productsSearch,
-        query: { ...pageParam, q: queryKey[1] },
-      });
-      try {
-        const apiResponse = await axios.get(url);
-
-        return apiResponse.data as ApiResponse<"products", Product>;
-      } catch (error) {
-        throw new Error("Error fetching products");
-      }
-    },
+    queryFn: getInfiniteProducts,
     initialPageParam: {
       skip: DEFAULT_PAGING.SKIP,
       limit: DEFAULT_PAGING.LIMIT,
