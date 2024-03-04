@@ -46,6 +46,7 @@ src\
  |--constants\      # Contains all contants used globally within project
  |--hooks\          # Contains every single custom hook in your entire project
  |--lib\            # Contains facades for the various different libraries used in project
+ |--services\       # Contains all api service function used in project
 ```
 
 ## Testing
